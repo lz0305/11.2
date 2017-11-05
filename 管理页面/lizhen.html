@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--JQ-->
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <!--bootstrap-->
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.css"><!--主题样式-->
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script><!--bootstrap JS-->
+    <!--summernote-->
+    <script src="node_modules/summernote/dist/summernote.js"></script>
+    <link rel="stylesheet" href="node_modules/summernote/dist/summernote.css">
+    <link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Analytics</a></li>
+                <li><a href="#">Export</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item</a></li>
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+                <li><a href="">More navigation</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">Dashboard</h1>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" id="open">
+                增加
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">新闻标题</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword2">作者</label>
+                                    <input type="text" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword3">时间</label>
+                                    <input type="date" class="form-control" id="exampleInputPassword3" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword3">详情</label>
+                                    <div id="summernote"></div>
+                                </div>
+                                <select name="" id="select1">
+                                    <option value="1">企业新闻</option>
+                                    <option value="2">行业新闻</option>
+                                </select>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"  id="tijiao">submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2 class="sub-header">Section title</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Author</th>
+                        <th>Content</th>
+                        <th>Classify</th>
+                        <th>Write</th>
+                        <th>Edit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        var addId='';
+        //获取全部数据
+        data();
+        //副文本编辑器
+        $('#summernote').summernote({
+            placeholder: 'Hello bootstrap 4',
+            tabsize: 2,
+            height: 100
+        });
+        //提交隐藏
+        $("#open").click(function () {
+            $("#tijiao").attr({ "data-dismiss": "modal"});
+        });
+        //添加和修改 数据
+        $("#tijiao").click(function () {
+            if($("h2").attr("id")=="tijiao"){
+                $("h2").attr("id","");
+                add("/make");
+            }else {
+                console.log("添加");
+                add()
+            }
+        });
+        //获取全部数据封装
+        function data() {
+            $.ajax({
+                url:"http://localhost:3000/all",
+                type:"get",
+                success:function (e) {
+                    console.log(e);
+                    var str='';
+                    for(i in e){
+                        if(e[i].uid=="1"){
+                            e[i].uid="企业新闻"
+                        }else {
+                            e[i].uid="行业新闻"
+                        }
+                        str+='<tr><td>'+e[i].title+'</td> <td>'+e[i].time+'</td> <td>'+e[i].people+'</td> <td>'+e[i].content+'</td><td>'+e[i].uid+'</td> <td><b class="glyphicon glyphicon-pencil" data-id="'+e[i].id+'"></b></td> <td><i class="glyphicon glyphicon-floppy-remove" data-id="'+e[i].id+'"></i></td></tr>'
+                    }
+                    $("tbody").html(str);
+                    //删除数据
+                    $("tbody").on("click","i",function(){
+//                        alert($(this).attr("data-id"));
+                        var a=$(this).parent();
+                        $.ajax({
+                            url:"http://localhost:3000/del",
+                            type:"post",
+                            data:{id:$(this).attr("data-id")},
+                            success:function (e) {
+                                alert(e)
+                            }
+                        });
+                        //移除元素
+                        a.parent().remove();
+                    });
+                    //实现文字隐藏
+                    $('tr').find('td:eq(3)').each(function(){
+                        var maxwidth=6;
+                        if($(this).text().length>maxwidth){ $(this).text($(this).text().substring(0,maxwidth)); $(this).html($(this).html()+'…');
+                        }
+                    });
+                    console.log($("tbody td:eq(3)"))
+                }
+            })
+        }
+        //修改和添加的封装
+        function add(a) {
+            var title=$("#exampleInputEmail1").val();
+            var date=$("#exampleInputPassword3").val();
+            var peo=$("#exampleInputPassword2").val();
+            var nei=$('#summernote').summernote('code');//获取当前详情代码
+            var xuanze=$("#select1  option:selected").val();//获取是什么新闻
+            if(title==""||date==""||peo==""){
+                $("#tijiao").attr({ "data-dismiss":""});
+                alert("看看哪里没填~")
+            }else{
+                $.ajax({
+                    url:"http://localhost:3000"+a,
+                    type:"post",
+                    data:{a:title,b:date,c:peo,d:nei,e:xuanze,f:addId},
+                    success:function (e) {
+                        console.log(e);
+                        $("#tijiao").attr({ "data-dismiss":""});
+                        alert(e);
+                        data();
+                        $("#exampleInputEmail1").val("");
+                        $("#exampleInputPassword3").val("");
+                        $("#exampleInputPassword2").val("");
+                    }
+                })
+            }
+        }
+        //修改的弹窗
+        $("tbody").on("click","b",function () {
+            addId=$(this).attr("data-id");
+            $("#open").trigger('click');
+            $("h2").attr("id","tijiao")
+        })
+    })
+</script>
+</html>
