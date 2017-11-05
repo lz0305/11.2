@@ -71,7 +71,7 @@
 
             <!-- Modal -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog" role="document" id="pd">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -102,7 +102,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="close">Close</button>
                             <button type="button" class="btn btn-primary"  id="tijiao">submit</button>
                         </div>
                     </div>
@@ -231,6 +231,13 @@
             $("#open").trigger('click');
             $("h2").attr("id","tijiao")
         })
+        //如果关闭修改页面 把id清了
+        $("#myModal").click(function () {
+            $("h2").attr("id","");
+        });
+        $("#close").click(function () {
+            $("h2").attr("id","");
+        });
     })
 </script>
 </html>
